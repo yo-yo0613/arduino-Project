@@ -1,0 +1,41 @@
+# === Unity 基本 ===
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+.Gradle/
+ExportedObj/
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb.meta
+*.DS_Store
+*.apk
+*.aab
+
+# === OS / 工具 ===
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# === 保留這些資料夾（要 commit）===
+!Assets/
+!Packages/
+!ProjectSettings/
