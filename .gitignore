@@ -1,41 +1,25 @@
-# === Unity 基本 ===
+# Unity generated folders
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
-[Mm]emoryCaptures/
-UserSettings/
-.Gradle/
-ExportedObj/
-*.pidb
-*.booproj
-*.svd
-*.pdb
-*.mdb
-*.opendb
-*.VC.db
-*.csproj
-*.unityproj
-*.sln
-*.suo
-*.tmp
-*.user
-*.userprefs
-*.pidb.meta
-*.DS_Store
-*.apk
-*.aab
+[Uu]ser[Ss]ettings/
 
-# === OS / 工具 ===
-.DS_Store
-Thumbs.db
-*.log
+# Crash Reports
+*.pid
+
+# VS / Rider / VSCode
+.vs/
 .vscode/
-.idea/
+*.csproj
+*.sln
+*.user
+*.unityproj
 
-# === 保留這些資料夾（要 commit）===
-!Assets/
-!Packages/
-!ProjectSettings/
+# PlatformIO
+.pio/
+
+Bulid/
+/[Bb]uild/

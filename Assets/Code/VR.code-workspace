@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "esp8266-project",
+			"path": "C:/Users/User/OneDrive/文件/PlatformIO/Projects/esp8266-project"
+		},
+		{
+			"name": "esp32-project",
+			"path": "C:/Users/User/OneDrive/文件/PlatformIO/Projects/esp32-project"
+		},
+		{
+			"name": "arduino-force-sensor",
+			"path": "C:/Users/User/OneDrive/文件/PlatformIO/Projects/arduino-force-sensor"
+		}
+	],
+	"settings": {
+		"dotnet.defaultSolution": "VR.sln"
+	}
+}
