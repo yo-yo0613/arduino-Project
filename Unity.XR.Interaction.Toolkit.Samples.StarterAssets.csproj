@@ -434,10 +434,6 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.58f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Google.Apis">
-      <HintPath>Assets\Packages\Google.Apis.1.73.0\lib\netstandard2.0\Google.Apis.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
       <Private>False</Private>
@@ -458,12 +454,20 @@
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.7.1\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.7.1\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Google.Apis.Core">
+      <HintPath>Assets\Packages\Google.Apis.Core.1.73.0\lib\netstandard2.0\Google.Apis.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Google.Apis.Sheets.v4">
-      <HintPath>Assets\Packages\Google.Apis.Sheets.v4.1.72.0.3966\lib\netstandard2.0\Google.Apis.Sheets.v4.dll</HintPath>
+    <Reference Include="System.Management">
+      <HintPath>Assets\Packages\System.Management.7.0.2\lib\netstandard2.0\System.Management.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\Packages\Newtonsoft.Json.13.0.4\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Plastic.Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@2.7.1\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="log4netPlastic">
@@ -474,28 +478,24 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>Assets\Packages\Google.Apis.1.73.0\lib\netstandard2.0\Google.Apis.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Assets\Packages\Newtonsoft.Json.13.0.4\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Google.Apis.Auth">
-      <HintPath>Assets\Packages\Google.Apis.Auth.1.73.0\lib\netstandard2.0\Google.Apis.Auth.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Google.Apis.Core">
-      <HintPath>Assets\Packages\Google.Apis.Core.1.73.0\lib\netstandard2.0\Google.Apis.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Management">
-      <HintPath>Assets\Packages\System.Management.7.0.2\lib\netstandard2.0\System.Management.dll</HintPath>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>Assets\Packages\Google.Apis.Auth.1.73.0\lib\netstandard2.0\Google.Apis.Auth.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Sheets.v4">
+      <HintPath>Assets\Packages\Google.Apis.Sheets.v4.1.72.0.3966\lib\netstandard2.0\Google.Apis.Sheets.v4.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">

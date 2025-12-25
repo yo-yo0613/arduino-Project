@@ -2,160 +2,127 @@ using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections;
 
 public class IntroManager : MonoBehaviour
 {
-    [Header("開場影片")]
+    [Header("1. 影片與場景")]
     public VideoPlayer videoPlayer;
+    public string nextSceneName = "Open"; 
 
-    [Header("UI 顯示")]
-    public TMP_Text nameText;        // 顯示最終組合的名字 (例如：超級帥氣企鵝)
-    
-    // 如果你想讓玩家知道現在選到哪個詞，可以分開三個 Text 顯示，或者只用上面那個顯示總合
-    [Header("分開顯示的 UI (選用，可不填)")]
-    public TMP_Text part1Text; // 顯示程度詞
-    public TMP_Text part2Text; // 顯示形容詞
-    public TMP_Text part3Text; // 顯示名詞
+    [Header("2. 文字顯示")]
+    public TMP_Text mainDisplayText; // 顯示名字的 Text
 
-    [Header("下一個 Scene 名稱")]
-    public string nextSceneName = "SampleScene";
+    [Header("3. 提示文字 (接力顯示)")]
+    public GameObject hintText1; // 先出來 (例如: 你的署名是...)
+    public GameObject hintText2; // 後出來 (例如: 按123選字...)
 
-    // ================== 詞庫設定 ==================
-    [Header("詞庫 1 (紅踏板/按鍵1)：程度形容詞")]
-    public string[] prefixWords = new string[] { 
-        "超級", "無敵", "有點", "非常", "絕對", "傳說的", "暴走的", "究極" 
-    };
+    // --- 詞庫 ---
+    private string[] adjectives = new string[] { "胖胖的", "邪惡的", "熟透的", "毛茸茸的", "超派的", "溼答答的", "健美的", "黏黏的", "歐氣的", "香香軟軟的", "可悲的", "窮困的", "頂級的", "高雅的" };
+    private string[] nouns = new string[] { "企鵝", "殭屍", "鳳梨酥", "高速婆婆", "青蛙", "羊咩咩", "湖中女神", "霸總", "大野狼", "鴿子", "韓老師", "賽馬娘", "白飯", "工程師", "406" };
+    private string[] verbs = new string[] { "拋出完美的拋物線", "翻身", "被拔了吃掉", "呱呱叫", "墜落落落落↓", "飛上天", "掉毛毛", "光頭亮光光", "流汗", "吁吁叫", "恨透專題", "emo了", "酸宗痛", "爆炸了" };
 
-    [Header("詞庫 2 (綠踏板/按鍵2)：形容詞")]
-    public string[] adjWords = new string[] { 
-        "帥氣", "搞笑", "暴力", "聰明", "軟爛", "幸運", "瘋狂", "神祕" 
-    };
-
-    [Header("詞庫 3 (藍踏板/按鍵3)：名詞")]
-    public string[] nounWords = new string[] { 
-        "企鵝", "隊長", "機器人", "殭屍", "大叔", "殺手", "王者", "小兵" 
-    };
-
-    // 記錄目前選到第幾個詞
-    private int index1 = 0;
-    private int index2 = 0;
-    private int index3 = 0;
-
-    private bool videoFinished = false;
+    private int idx1 = 0;
+    private int idx2 = 0;
+    private int idx3 = 0;
+    private bool isInteractionEnabled = false;
 
     void Start()
     {
-        // 初始化名字
-        GlobalGameManager.playerName = "";
+        // 1. 畫面初始化：隱藏所有文字
+        if (hintText1 != null) hintText1.SetActive(false);
+        if (hintText2 != null) hintText2.SetActive(false);
+        if (mainDisplayText != null) mainDisplayText.gameObject.SetActive(false);
+        
+        isInteractionEnabled = false;
+        RandomizeName();
 
+        // 2. 影片設定
         if (videoPlayer != null)
         {
-            videoPlayer.loopPointReached += OnVideoFinished;
+            videoPlayer.playOnAwake = false; 
+            videoPlayer.isLooping = false;   // 強制不循環
+            videoPlayer.time = 0;
+            videoPlayer.loopPointReached += OnVideoFinished; // 綁定結束事件
+            videoPlayer.Play(); // 直接播放
         }
-        else
-        {
-            videoFinished = true;
-            UpdateNameDisplay();
-        }
+    }
 
-        // 初始化顯示
-        UpdateNameDisplay();
+    void OnVideoFinished(VideoPlayer vp)
+    {
+        // 影片播完，定格
+        vp.Pause();
+        
+        // 開始執行「切換顯示」的動畫
+        StartCoroutine(ShowUISequence());
+    }
+
+    // ★★★ 關鍵修改：Hint1 消失後 -> Hint2 才出來 ★★★
+    IEnumerator ShowUISequence()
+    {
+        // 1. 先顯示 Hint 1 (例如：你的名字是...)
+        if (hintText1 != null) hintText1.SetActive(true);
+        
+        // 2. 讓 Hint 1 停留 2 秒 (讓玩家看清楚)
+        yield return new WaitForSeconds(2.0f);
+
+        // 3. ★ 關鍵：把 Hint 1 關掉！
+        if (hintText1 != null) hintText1.SetActive(false);
+
+        // 4. 再顯示 Hint 2 (操作說明) 和 名字
+        if (hintText2 != null) hintText2.SetActive(true);
+        if (mainDisplayText != null) mainDisplayText.gameObject.SetActive(true);
+
+        // 5. 最後才允許玩家按按鍵
+        isInteractionEnabled = true;
+    }
+
+    void Update()
+    {
+        // 鍵盤備用輸入
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) OnFsPos(1);
+        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) OnFsPos(2);
+        if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) OnFsPos(3);
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) OnFsPos(4);
+    }
+
+    public void OnFsPos(int pos)
+    {
+        // 如果 UI 還沒全部跑出來，不准動
+        if (!isInteractionEnabled) return;
+
+        if (pos == 1) { idx1 = (idx1 + 1) % adjectives.Length; UpdateDisplay(); }
+        else if (pos == 2) { idx2 = (idx2 + 1) % nouns.Length; UpdateDisplay(); }
+        else if (pos == 3) { idx3 = (idx3 + 1) % verbs.Length; UpdateDisplay(); }
+        else if (pos == 4) ConfirmAndNext();
+    }
+
+    void RandomizeName()
+    {
+        idx1 = Random.Range(0, adjectives.Length);
+        idx2 = Random.Range(0, nouns.Length);
+        idx3 = Random.Range(0, verbs.Length);
+        UpdateDisplay();
+    }
+
+    void UpdateDisplay()
+    {
+        if (mainDisplayText != null)
+            mainDisplayText.text = adjectives[idx1] + nouns[idx2] + verbs[idx3];
+    }
+
+    void ConfirmAndNext()
+    {
+        string finalName = adjectives[idx1] + nouns[idx2] + verbs[idx3];
+        GlobalGameManager.playerName = finalName;
+        // ★★★ Debug 顯示確認 ★★★
+        Debug.Log($"<color=yellow>[IntroManager] 玩家選擇的名字是: {finalName}</color>");
+        Debug.Log($"<color=green>[GlobalGameManager] 確認已存檔! 現在 GlobalGameManager.playerName = {GlobalGameManager.playerName}</color>");
+        SceneManager.LoadScene(nextSceneName);
     }
 
     void OnDestroy()
     {
         if (videoPlayer != null) videoPlayer.loopPointReached -= OnVideoFinished;
-    }
-
-    void OnVideoFinished(VideoPlayer vp)
-    {
-        videoFinished = true;
-        Debug.Log("[INTRO] 影片結束，開始選名字");
-        UpdateNameDisplay();
-    }
-
-    void Update()
-    {
-        // 測試用：跳過影片
-        if (!videoFinished && Input.GetKeyDown(KeyCode.S))
-        {
-            videoFinished = true;
-            UpdateNameDisplay();
-        }
-
-        // 鍵盤模擬 FSR
-        if (Input.GetKeyDown(KeyCode.Alpha1)) OnFsPos(1); // 切換詞 1
-        if (Input.GetKeyDown(KeyCode.Alpha2)) OnFsPos(2); // 切換詞 2
-        if (Input.GetKeyDown(KeyCode.Alpha3)) OnFsPos(3); // 切換詞 3
-        
-        // 確認鍵 (4 / Enter / Space)
-        if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space)) 
-        {
-            OnFsPos(4); 
-        }
-    }
-
-    public void OnFsPos(int pos)
-    {
-        if (!videoFinished) return;
-
-        if (pos == 1)
-        {
-            // 紅踏板：切換程度詞
-            index1 = (index1 + 1) % prefixWords.Length; // 循環切換
-            UpdateNameDisplay();
-        }
-        else if (pos == 2)
-        {
-            // 綠踏板：切換形容詞
-            index2 = (index2 + 1) % adjWords.Length;
-            UpdateNameDisplay();
-        }
-        else if (pos == 3)
-        {
-            // 藍踏板：切換名詞
-            index3 = (index3 + 1) % nounWords.Length;
-            UpdateNameDisplay();
-        }
-        else if (pos == 4)
-        {
-            // 確認並開始
-            ConfirmAndGoNext();
-        }
-    }
-
-    // 更新畫面上的文字
-    void UpdateNameDisplay()
-    {
-        string p1 = prefixWords[index1];
-        string p2 = adjWords[index2];
-        string p3 = nounWords[index3];
-
-        // 組合起來：超級 + 帥氣 + 企鵝
-        string fullName = p1 + p2 + p3;
-
-        // 如果你有拉 Main Name Text，顯示完整名字
-        if (nameText != null) nameText.text = fullName;
-
-        // 如果你有拉分開的 Text (選用)，也可以分開顯示，讓玩家看清楚每一段變什麼
-        if (part1Text != null) part1Text.text = p1;
-        if (part2Text != null) part2Text.text = p2;
-        if (part3Text != null) part3Text.text = p3;
-    }
-
-    public void ConfirmAndGoNext()
-    {
-        // 組合最終名字
-        string finalName = prefixWords[index1] + adjWords[index2] + nounWords[index3];
-
-        GlobalGameManager.ResetData();
-        GlobalGameManager.playerName = finalName;
-
-        Debug.Log($"[INTRO] 名字已決定: '{finalName}' -> 前往 {nextSceneName}");
-
-        if (!string.IsNullOrEmpty(nextSceneName))
-        {
-            SceneManager.LoadScene(nextSceneName);
-        }
     }
 }

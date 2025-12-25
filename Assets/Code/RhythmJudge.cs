@@ -65,9 +65,56 @@ public class RhythmJudge : MonoBehaviour
 
     void Update()
     {
+        // 玩家輸入判定
         if (Input.GetKeyDown(KeyCode.Alpha1)) OnPadHit(1);
         if (Input.GetKeyDown(KeyCode.Alpha2)) OnPadHit(2);
         if (Input.GetKeyDown(KeyCode.Alpha3)) OnPadHit(3);
+
+        // ★★★ 新增：每一幀檢查是否有殭屍跑掉 (漏接) ★★★
+        CheckMissedZombies();
+    }
+
+    // ★★★ 新增：檢查漏接邏輯 ★★★
+    void CheckMissedZombies()
+    {
+        if (laneManager == null) return;
+
+        // 檢查三條跑道
+        CheckLaneForMiss(laneManager.lane1Zombies);
+        CheckLaneForMiss(laneManager.lane2Zombies);
+        CheckLaneForMiss(laneManager.lane3Zombies);
+    }
+
+    // ★★★ 修改後的檢查漏接邏輯 ★★★
+    void CheckLaneForMiss(ZombieRunner[] zombies)
+    {
+        if (zombies == null) return;
+
+        foreach (var z in zombies)
+        {
+            // 1. 必須檢查殭屍是否還開啟 (Active)
+            if (z != null && z.gameObject.activeSelf && z.IsRunning)
+            {
+                float progress = z.GetAnimationProgress();
+
+                // ★★★ Debug 用：如果你發現還是沒反應，請把這行取消註解，看看進度是多少 ★★★
+                // Debug.Log($"Zombie Progress: {progress}");
+
+                // 2. 關鍵修改：不要等到 1.0f，改用 0.98f 或 0.99f
+                // 因為浮點數誤差，有時候它會卡在 0.99999，永遠不到 1.0
+                // 而且我們要趕在它自動消失前抓到它！
+                if (progress >= 0.99f) 
+                {
+                    //Debug.Log($"<color=red>抓到了！漏接殭屍！進度: {progress}</color>");
+
+                    // 3. 觸發 Bad/Miss 懲罰
+                    HandleBadHit(); 
+                    
+                    // 4. 處決殭屍 (讓它消失)
+                    z.HideImmediately();
+                }
+            }
+        }
     }
 
     public void OnPadHit(int lane)
@@ -116,29 +163,22 @@ public class RhythmJudge : MonoBehaviour
         {
             feedbackObj = perfectObj; isGoodHit = true;
             GlobalGameManager.perfectCount++;  
-            // 處理 Combo (包含歸零邏輯)
             AddCombo();
-
             TriggerExplosion(lane);
-            //Debug.Log($"<color=cyan>PERFECT!</color> +{scorePerfect}");
         }
         else if (minDiff <= greatTol)
         {
             feedbackObj = greatObj; isGoodHit = true;
             GlobalGameManager.greatCount++; 
             AddCombo();
-
             TriggerExplosion(lane);
-            //Debug.Log($"<color=green>GREAT!</color> +{scoreGreat}");
         }
         else if (minDiff <= goodTol)
         {
             feedbackObj = goodObj; isGoodHit = true;
             GlobalGameManager.goodCount++; 
             AddCombo();
-
             TriggerExplosion(lane);
-            //Debug.Log($"<color=yellow>GOOD</color> +{scoreGood}");
         }
         else
         {
@@ -184,26 +224,23 @@ public class RhythmJudge : MonoBehaviour
 
     void HandleBadHit()
     {
-        ShowFeedback(badObj);
+        // 這裡會顯示 Bad，如果你想要顯示 Miss，可以把 badObj 改成 missObj
+        ShowFeedback(badObj); 
         UpdateRobotFace(false);
         PlayFailureSound();
         ResetCombo();
     }
 
-    // ★ 修改處 1：加入歸零邏輯
     void AddCombo()
     {
         GlobalGameManager.currentCombo++;
-        
-        // 更新 UI (如果滿3次就會顯示)
-        UpdateComboUI();
 
-        // ★ 核心邏輯：如果達到 3 次，就歸零重新計算
-        // 這樣下一次打中就會變回 Combo 1，不會一直觸發特效
-        if (GlobalGameManager.currentCombo >= 3)
+        if (GlobalGameManager.currentCombo > GlobalGameManager.maxCombo)
         {
-            GlobalGameManager.currentCombo = 0;
+            GlobalGameManager.maxCombo = GlobalGameManager.currentCombo;
         }
+
+        UpdateComboUI();
     }
 
     void ResetCombo()
@@ -212,7 +249,6 @@ public class RhythmJudge : MonoBehaviour
         if (comboEffectObj != null) comboEffectObj.SetActive(false);
     }
 
-    // ★ 修改處 2：移除 else 區塊
     void UpdateComboUI()
     {
         if (comboEffectObj == null) return;
@@ -222,9 +258,6 @@ public class RhythmJudge : MonoBehaviour
             if (comboRoutine != null) StopCoroutine(comboRoutine);
             comboRoutine = StartCoroutine(ReplayComboAnim());
         }
-        // ★ 注意：這裡原本有 else { SetActive(false) } 被我拿掉了。
-        // 這是為了防止「剛觸發 Combo 3 (歸零) -> 下一秒打出 Combo 1 -> 把 Combo 3 的特效切斷」的情況。
-        // 現在特效只會靠下面的 ReplayComboAnim 時間到自動消失，或者 ResetCombo (Miss) 時強制消失。
     }
 
     IEnumerator ReplayComboAnim()
@@ -239,7 +272,6 @@ public class RhythmJudge : MonoBehaviour
         }
     }
 
-    // ... (其餘部分保持不變) ...
     void PlayFailureSound()
     {
         if (audioSource != null && failureSound != null)

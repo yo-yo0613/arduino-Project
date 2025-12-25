@@ -104,30 +104,39 @@ public class EndSceneManager : MonoBehaviour
         if (data == null) data = new LeaderboardData();
 
         int currentScore = GlobalGameManager.CalculateTotalScore();
-        string currentName = GlobalGameManager.playerName;
-
-        // ★★★ 修改處開始 ★★★
-        // 原本這裡會把空名字改成 "Player"，我們把它註解掉或刪除
-        // 這樣如果名字是空的，排行榜上就會顯示空白，而不會顯示 "Player"
         
-        /* if (string.IsNullOrEmpty(currentName)) 
+        // ★ 這是給「本地排行榜」用的名字 (超級帥氣企鵝)
+        string localName = GlobalGameManager.playerName; 
+
+        // ==========================================
+        // ★★★ 上傳分數到 Google Sheets ★★★
+        // ==========================================
+        if (GoogleSheetDataHandler.Instance != null)
         {
-            currentName = "Player";
-            Debug.LogWarning("注意：GlobalGameManager.playerName 是空的！使用預設值。");
+            // ⚠️【重要修改】請把下面這行 設定 ID 的程式碼 刪除或註解掉！⚠️
+            // GoogleSheetDataHandler.Instance.PlayerID = localName;  <-- 刪掉這行！
+            
+            // 原因：GoogleSheetDataHandler 已經在 Open 場景記住 "yoyo" 了。
+            // 如果你在這裡又把 localName ("超級帥氣企鵝") 塞給它，"yoyo" 就會被蓋掉。
+            // 我們只要直接上傳分數就好，它會自己用 "yoyo"。
+            
+            GoogleSheetDataHandler.Instance.UploadScore(currentScore);
+            Debug.Log($"[GoogleSheet] 已呼叫上傳分數 (使用原本的 ID): {GoogleSheetDataHandler.Instance.PlayerID} - 分數: {currentScore}");
         }
-        */
+        else
+        {
+            Debug.LogWarning("找不到 GoogleSheetDataHandler！");
+        }
+        // ==========================================
 
-        // 如果你希望「沒有名字的人根本不要紀錄到排行榜」，請取消下面這行的註解：
-        // if (string.IsNullOrEmpty(currentName)) return; 
+        // ★ 下面繼續做本地排行榜的存檔 (這裡會用 localName = 超級帥氣企鵝)
         
-        // ★★★ 修改處結束 ★★★
-
         // 產生 ID
         myCurrentGameID = System.Guid.NewGuid().ToString();
 
         // 新增資料
         data.entries.Add(new HighScoreEntry { 
-            name = currentName, 
+            name = localName,  // 這裡存 "超級帥氣企鵝"
             score = currentScore,
             id = myCurrentGameID 
         });
@@ -141,7 +150,7 @@ public class EndSceneManager : MonoBehaviour
         PlayerPrefs.SetString("Leaderboard", newJson);
         PlayerPrefs.Save();
         
-        Debug.Log($"分數已儲存: {currentName} - {currentScore} (ID: {myCurrentGameID})");
+        Debug.Log($"本地分數已儲存: {localName} - {currentScore}");
     }
 
     void UpdateLeaderboardUI()

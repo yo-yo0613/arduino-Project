@@ -20,5 +20,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GoogleSheetOpen.unity
     guid: a431ac13c23917e459a25b06218bfe99
+  - enabled: 1
+    path: Assets/Scenes/Arduino-Project/Scene1_Order.unity
+    guid: 28a79f53a571073458f197f1d779c1dd
+  - enabled: 1
+    path: Assets/Scenes/Arduino-Project/Scene2_Kitchen.unity
+    guid: 788b0e02db5d6bb4886d75b35e62a7f1
+  - enabled: 1
+    path: Assets/Scenes/Arduino-Project/ResultScene.unity
+    guid: 1c1a56d192274f441b17ed370d5dd206
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 9b4a986a2de4b4440a49782c6523f254, type: 2}

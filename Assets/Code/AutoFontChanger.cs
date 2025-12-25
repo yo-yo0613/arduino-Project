@@ -21,7 +21,7 @@ public class AutoFontChanger : MonoBehaviour
         }
 
         // 1. 抓出當前場景所有開啟的 TMP_Text 物件
-        TMP_Text[] allTexts = FindObjectsOfType<TMP_Text>();
+        TMP_Text[] allTexts = FindObjectsOfType<TMP_Text>(true);
 
         // 2. 跑迴圈全部換掉
         foreach (var text in allTexts)
