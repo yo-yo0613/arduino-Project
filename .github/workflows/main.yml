@@ -24,7 +24,7 @@ jobs:
 
       # 2. 清理空間 (GitHub 免費機器空間比較小，清一下防爆)
       - name: Free Disk Space
-        uses: jlumbroso/free-disk-space-action@v1.3.1
+        uses: jlumbroso/free-disk-space@v1.3.1
 
       # 3. 快取 Library (第一次會比較慢，之後會很快)
       - name: Cache Library
