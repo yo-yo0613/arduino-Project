@@ -1,0 +1,26 @@
+name: Get Activation File 🔑
+
+on: workflow_dispatch # 讓我們可以手動按按鈕
+
+jobs:
+  activation:
+    name: Request Manual Activation 📝
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 下載專案
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. 產生指紋檔 (.alf)
+      - name: Request Manual Activation File
+        id: getManualLicenseFile
+        uses: game-ci/unity-request-activation-file@v2
+        with:
+          unityVersion: 2022.3.58f1 # 確保這裡跟你的版本一樣
+
+      # 3. 上傳指紋檔讓你下載
+      - name: Upload Activation File
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unity_Activation_File
+          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
