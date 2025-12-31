@@ -25,7 +25,7 @@ public class GoogleSheetDataHandler : MonoBehaviour
     [SerializeField] private GameObject IDInputUI;
     [SerializeField] private TMP_InputField IDInputField;
     [SerializeField] private TextMeshProUGUI IDTextMesh;
-    
+//    a
     public string PlayerID {get;set;}
 
     private static readonly string sheetID = "1EdjiH8Itg6wNBf4MS9IlT-j5yYkFqR3uqo0Toic28N8";
@@ -66,6 +66,13 @@ public class GoogleSheetDataHandler : MonoBehaviour
 
     public void PlayerIDEntered() //Run after Player Entered ID
     {
+        // ★★★ 修正 1：強制把輸入框的字存進變數 ★★★
+        if (IDInputField != null)
+        {
+            PlayerID = IDInputField.text; 
+            Debug.Log($"[GoogleSheetHandler] 已儲存玩家 ID: {PlayerID}");
+        }
+        
         if (!changeID)
         {
             OnPlayerIDEntered.Invoke();
