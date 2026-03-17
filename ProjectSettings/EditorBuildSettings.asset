@@ -7,27 +7,33 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Open.unity
-    guid: 659d05979cd062d4baa4add0ab10d7e8
+    guid: a73e72314d7df0a4bb8e12615a05e1e9
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    guid: 368178704a459134f908347f94032c5d
   - enabled: 1
     path: Assets/Scenes/First.unity
-    guid: 7de5c43c5eb7b7f4b8182d8fdaf9f90d
+    guid: 070b2f2aa1bab284c8cf3ced2f3e5021
   - enabled: 1
     path: Assets/Scenes/End.unity
-    guid: 2bdae33d301c4a04caaf42db3302d815
+    guid: 03612d3988574ac438b81c171c894aa7
   - enabled: 1
     path: Assets/Scenes/GoogleSheetOpen.unity
-    guid: a431ac13c23917e459a25b06218bfe99
-  - enabled: 1
+    guid: b400e1886c0429e45b53f31ecdf63767
+  - enabled: 0
     path: Assets/Scenes/Arduino-Project/Scene1_Order.unity
     guid: 28a79f53a571073458f197f1d779c1dd
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arduino-Project/Scene2_Kitchen.unity
     guid: 788b0e02db5d6bb4886d75b35e62a7f1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arduino-Project/ResultScene.unity
     guid: 1c1a56d192274f441b17ed370d5dd206
+  - enabled: 0
+    path: Assets/Scenes/Arduino-Project/Video.unity
+    guid: 09dde2526927a2841b304136a144df6a
+  - enabled: 0
+    path: Assets/Scenes/Arduino-Project/Tutorial_Video.unity
+    guid: 5d988f6c32419e545ac7ca1dcc7bb5c6
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 9b4a986a2de4b4440a49782c6523f254, type: 2}

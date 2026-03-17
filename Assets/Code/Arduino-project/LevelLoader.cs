@@ -5,31 +5,46 @@ using System.Collections;
 
 public class LevelLoader : MonoBehaviour
 {
-    public GameObject loadingScreen; // 載入畫面 UI
-    public Slider progressBar;       // 進度條
+    [Header("連結組件")]
+    public ArduinoManager arduino;    // 拖入 Scene1 的 ArduinoManager
+    public GameObject loadingScreen;
+    public Slider progressBar;
 
-    public string SceneName = "Scene2_Kitchen";
+    [Header("設定")]
+    public string nextScene = "Scene2_Kitchen";
+    public int fsrJumpThreshold = 600; // 壓力大於 600 則跳轉
+
+    private bool _hasTriggered = false;
+
+    void Update()
+    {
+        // 邏輯優化：在 Scene 1 監測 FSR 數值
+        if (!_hasTriggered && arduino != null)
+        {
+            if (arduino.CurrentPressure > fsrJumpThreshold)
+            {
+                _hasTriggered = true; // 防止重複觸發
+                Debug.Log("FSR 壓力達標，載入下一場景..." + arduino.CurrentPressure);
+                LoadKitchenScene();
+            }
+        }
+    }
 
     public void LoadKitchenScene()
     {
-        StartCoroutine(LoadAsynchronously(SceneName));
+        StartCoroutine(LoadAsynchronously(nextScene));
     }
 
-    IEnumerator LoadAsynchronously(string sceneName)
+    IEnumerator LoadAsynchronously(string name)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-        
-        loadingScreen.SetActive(true); // 顯示載入畫面
+        AsyncOperation operation = SceneManager.LoadSceneAsync(name);
+        if (loadingScreen != null) loadingScreen.SetActive(true);
 
         while (!operation.isDone)
         {
-            // operation.progress 範圍是 0 到 0.9
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
-            
-            if (progressBar != null)
-                progressBar.value = progress;
-
-            yield return null; // 等待下一幀，確保畫面不卡死
+            if (progressBar != null) progressBar.value = progress;
+            yield return null;
         }
     }
 }

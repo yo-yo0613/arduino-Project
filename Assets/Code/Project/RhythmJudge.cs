@@ -226,6 +226,11 @@ public class RhythmJudge : MonoBehaviour
         PlayFailureSound();
         ResetCombo();
 
+        // ==========================================
+        // ★★★ 漏掉的關鍵在這裡！加上這行才會真正紀錄到 Miss ★★★
+        // ==========================================
+        GlobalGameManager.missCount++;
+
         // ★ 新增：呼叫角色管理器播動畫
         if (lane != -1 && charManager != null)
         {

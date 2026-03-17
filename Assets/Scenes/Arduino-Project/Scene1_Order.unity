@@ -460,9 +460,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab2c5f19e324b174b9472627fd5c1f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arduino: {fileID: 1985760964}
   loadingScreen: {fileID: 1230468315}
   progressBar: {fileID: 2008530097}
-  SceneName: Scene2_Kitchen
+  nextScene: Scenes/Arduino-Project/Video
+  fsrJumpThreshold: 600
 --- !u!4 &820489670
 Transform:
   m_ObjectHideFlags: 0
@@ -1088,6 +1090,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1847552863}
   m_CullTransparentMesh: 1
+--- !u!1 &1985760963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1985760965}
+  - component: {fileID: 1985760964}
+  m_Layer: 0
+  m_Name: Arduino-Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1985760964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985760963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebaf257ac08e7e74682d36f8684e8649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useSimulation: 0
+  portName: COM4
+  baudRate: 115200
+--- !u!4 &1985760965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985760963}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1034.4468, y: 494.41788, z: 7385.994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2008530095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,3 +1311,4 @@ SceneRoots:
   - {fileID: 297761218}
   - {fileID: 914501053}
   - {fileID: 820489670}
+  - {fileID: 1985760965}

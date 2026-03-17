@@ -30,11 +30,16 @@ public static class GlobalGameManager
 
     public static int CalculateTotalScore()
     {
-        // 你也可以把 maxCombo 加進總分公式裡，這裡先維持原樣
-        return (perfectCount * 5) + 
-               (greatCount * 4) + 
-               (goodCount * 3) + 
-               (missCount * 1) + 
-               (badCount * 0);
+        // 先把計算結果存進一個變數 total
+        int total = (perfectCount * 5) + 
+                    (greatCount * 4) + 
+                    (goodCount * 3) + 
+                    (missCount * -1) +  // ★ 修改這裡：把 1 改成 -1，代表扣 1 分
+                    (badCount * 0);     // 如果 Bad 也要扣分，這裡也可以改成 -1 或 -2
+
+        // ★ 額外建議：防止總分變成負數 (如果你的遊戲允許負分，這行可以不用加)
+        // Mathf.Max(0, total) 的意思是：在 0 和 total 之間取比較大的那個。
+        // 所以如果 total 被扣到變成 -5，它會回傳 0。
+        return Mathf.Max(0, total); 
     }
 }
